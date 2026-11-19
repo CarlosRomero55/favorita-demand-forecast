@@ -66,3 +66,15 @@ def test_inventario():
     with pytest.raises(ValueError):
         inventory.z_for(0.5)
     assert math.isclose(inventory.z_for(0.95), 1.6449)
+
+
+def test_snapshot_liviano_y_completo():
+    import json
+
+    meta_path = config.APP_DATA / "metadata.json"
+    if not meta_path.exists():
+        pytest.skip("snapshot no generado")
+    meta = json.loads(meta_path.read_text(encoding="utf-8"))
+    for f in config.APP_DATA.glob("*.parquet"):
+        assert f.stat().st_size < 5e6, f"{f.name} supera 5 MB"
+    assert meta["model"]["rmsle"] < meta["model"]["baseline_rmsle"]
