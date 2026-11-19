@@ -54,7 +54,7 @@ def connect(path: Path | None = None):
 def query(sql: str, path: Path | None = None) -> pd.DataFrame:
     """Ejecuta una consulta y devuelve un DataFrame."""
     with connect(path) as con:
-        return con.sql(sql).df()
+        return con.execute(sql).df()
 
 
 def run_sql_file(con, file: Path) -> None:
