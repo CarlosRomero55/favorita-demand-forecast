@@ -17,7 +17,7 @@ def test_ddl_idempotente():
     _apply(con)  # segunda vez no debe fallar
     tablas = {
         f"{s}.{t}"
-        for s, t in con.sql(
+        for s, t in con.execute(
             "select table_schema, table_name from information_schema.tables"
         ).fetchall()
     }
