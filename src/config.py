@@ -48,7 +48,7 @@ MSSQL_DRIVER = os.getenv("MSSQL_DRIVER", "ODBC Driver 18 for SQL Server")
 HORIZON = 16  # días a pronosticar (igual que test.csv)
 LAGS = [16, 21, 28, 35]  # lags >= horizonte para no filtrar información
 N_BACKTEST_FOLDS = 3
-TRAIN_START = os.getenv("TRAIN_START", "2015-01-01")
+TRAIN_START = os.getenv("TRAIN_START", "2015-07-01")  # registro estable desde jun-2015 (ADR 0004)
 SERVICE_LEVELS = {0.90: 1.2816, 0.95: 1.6449, 0.98: 2.0537}  # nivel -> z
 RANDOM_STATE = 42
 
