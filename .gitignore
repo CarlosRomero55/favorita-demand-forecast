@@ -1,0 +1,21 @@
+# Entorno y secretos
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Datos crudos de Kaggle (pesados; sus términos limitan la redistribución)
+/data/raw/
+/data/processed/
+*.duckdb
+*.duckdb.wal
+
+# Artefactos locales
+/logs/
+/models/*.txt
+/models/*.pkl
+submission.csv
+
+# Sí se versiona app/data/*.parquet (resúmenes agregados < 5 MB)

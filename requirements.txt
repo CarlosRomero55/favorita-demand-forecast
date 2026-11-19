@@ -1,0 +1,21 @@
+# Entorno completo del proyecto (pipeline, modelo, notebooks, app y pruebas)
+duckdb==2.0.0
+pandas==3.1.1
+numpy==2.5.5
+pyarrow==26.0.1
+lightgbm==4.7.0
+scikit-learn==1.9.1
+shap==0.54.1
+matplotlib==3.11.2
+plotly==7.1.0
+streamlit==1.67.0
+python-dotenv==1.2.4
+kaggle==2.2.5
+pytest==9.2.0
+jupyter==1.1.1
+nbconvert==7.17.2
+nbformat==5.11.1
+ipykernel==7.4.0
+# Opcional, solo si se usa SQL Server (DB_ENGINE=mssql):
+# sqlalchemy==2.0.44
+# pyodbc==5.3.0
