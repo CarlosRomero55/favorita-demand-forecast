@@ -1,0 +1,83 @@
+{
+  "generated_at": "2026-11-19T12:04:08",
+  "source": {
+    "name": "Store Sales - Time Series Forecasting (Kaggle)",
+    "url": "https://www.kaggle.com/competitions/store-sales-time-series-forecasting",
+    "rules_url": "https://www.kaggle.com/competitions/store-sales-time-series-forecasting/rules",
+    "citation": "Alexis Cook, DanB, inversion, Ryan Holbrook. (2021). Store Sales - Time Series Forecasting. Kaggle."
+  },
+  "period": {
+    "start": "2013-01-01",
+    "end": "2017-08-15",
+    "forecast_start": "2017-08-16",
+    "forecast_end": "2017-08-31"
+  },
+  "counts": {
+    "stores": 54,
+    "families": 33,
+    "series": 1782,
+    "gold_fact_sales_rows": 3000888
+  },
+  "kpis": {
+    "total_sales": 1073644952.2030685,
+    "avg_daily_sales_2017": 855581.7990011941,
+    "growth_2016": 0.19504968597234162,
+    "national_holiday_median_pct": 0.11547230032732436,
+    "christmas_eve_median_pct": 0.24398209484046474,
+    "local_holiday_median_pct": -0.03556590733053899,
+    "payday_post_1_3_pct": 0.07998244170540136,
+    "promo_lift_weighted_stratified": 0.09004571705142486,
+    "earthquake_zone_change": 0.4026395132164753,
+    "earthquake_rest_change": 0.14497179444205388,
+    "earthquake_zone_change_2015": 0.05868437587291875,
+    "oil_corr_level": -0.787837215450411,
+    "oil_corr_yoy": -0.155799178710137,
+    "sunday_index": 1.305093274593667,
+    "december_index": 1.3456049069430247
+  },
+  "model": {
+    "name": "lightgbm_global",
+    "version": "v1",
+    "folds": [
+      [
+        "2017-06-29",
+        "2017-07-14"
+      ],
+      [
+        "2017-07-15",
+        "2017-07-30"
+      ],
+      [
+        "2017-07-31",
+        "2017-08-15"
+      ]
+    ],
+    "rmsle": 0.4037,
+    "wape": 0.1278,
+    "bias": -0.0248,
+    "baseline_rmsle": 0.5519,
+    "baseline_wape": 0.1696,
+    "ma14_rmsle": 0.4847,
+    "ma14_wape": 0.2264
+  },
+  "files_mb": {
+    "sales_daily": 2.585,
+    "stores": 0.004,
+    "families": 0.002,
+    "sales_province_daily": 0.252,
+    "sales_total_daily": 0.051,
+    "forecasts": 0.383,
+    "backtest_metrics": 0.014,
+    "backtest_daily": 0.006,
+    "feature_importance": 0.004,
+    "effect_seasonality": 0.002,
+    "effect_holidays": 0.003,
+    "effect_payday": 0.003,
+    "effect_promo": 0.005,
+    "effect_earthquake": 0.003,
+    "oil_monthly": 0.004,
+    "kpi_yearly": 0.004,
+    "kpi_family": 0.005,
+    "kpi_store": 0.005
+  }
+}
