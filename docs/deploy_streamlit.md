@@ -11,7 +11,7 @@ La app solo lee `app/data/*.parquet` y `app/data/metadata.json`, que ya están v
    - **App URL:** por ejemplo `favorita-forecast` (queda `https://favorita-forecast.streamlit.app`).
 4. En **Advanced settings**, elige Python 3.12 o superior. Las dependencias salen de `app/requirements.txt` (Streamlit busca primero el archivo junto al script principal).
 5. Haz clic en **Deploy**. El primer arranque tarda 1–2 minutos.
-6. Copia la URL y reemplaza el marcador `APP_URL_PENDIENTE` en `README.md` y en `portfolio.json`.
+6. Copia la URL y agrégala a `README.md`, `portfolio.json` y `docs/linkedin.md`. App publicada: https://favorita-demand-forecast-k3bm7c69sld3b67ygiwxnu.streamlit.app/
 
 ## Actualizar los datos de la app
 ```bash
