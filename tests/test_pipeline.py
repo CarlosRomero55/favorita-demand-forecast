@@ -69,3 +69,14 @@ def test_pipeline_idempotente_y_reglas(mini_raw):
     assert pay == {date(2017, 7, 15): True, date(2017, 7, 31): True, date(2017, 7, 16): False}
     dtp = con.execute("SELECT days_to_payday FROM gold.dim_date WHERE date = '2017-07-10'").fetchone()[0]
     assert dtp == 5
+
+
+def test_funciones_de_analisis_corren(mini_raw):
+    from src import analysis
+
+    con = duckdb.connect()
+    _run(con)
+    daily = analysis.daily_totals(con)
+    assert {"ratio", "is_normal"} <= set(daily.columns)
+    assert not analysis.holiday_effects(daily).empty
+    assert len(analysis.payday_profile(daily)) > 0
