@@ -1,0 +1,29 @@
+{
+  "title": "Favorita Demand Forecast",
+  "subtitle": "Pronóstico de demanda a 16 días para 54 supermercados ecuatorianos, con efectos de feriados, promociones y quincena",
+  "problem": "¿Cuánto va a vender cada tienda de un supermercado ecuatoriano las próximas semanas, y qué tanto mueven las ventas los feriados, las promociones y la quincena?",
+  "stack": ["Python", "SQL", "T-SQL", "DuckDB", "pandas", "LightGBM", "SHAP", "Plotly", "Streamlit", "pytest", "Git"],
+  "highlights": [
+    "Pipeline Medallion (bronze, silver, gold) idempotente con 8 pruebas de calidad sobre 3,000,888 filas",
+    "Modelo LightGBM global para 1,782 series, con lags de 16 días o más para evitar fugas",
+    "Backtest temporal de 3 cortes de 16 días contra dos baselines",
+    "App bilingüe con explorador de pronóstico y stock recomendado según el nivel de servicio",
+    "Detección de meses con registro incompleto antes de 2015, que inflaban el crecimiento"
+  ],
+  "kpis": [
+    {"label": "WAPE del modelo", "value": "12.8%", "context": "vs. 17.0% del naive estacional"},
+    {"label": "RMSLE", "value": "0.405", "context": "vs. 0.552 del naive estacional"},
+    {"label": "Error del total diario de la cadena", "value": "4.5%"},
+    {"label": "Series pronosticadas", "value": "1,782"}
+  ],
+  "findings": [
+    "Los días 1–3 después del pago venden 8% más; el día de pago, no",
+    "Feriado nacional +12% (mediana); feriado local −3.6% en la tienda de esa ciudad",
+    "La comparación ingenua de promociones en GROCERY I sugiere +121%; dentro de la misma tienda y mes es +6.5%",
+    "Domingo +31% y diciembre +32% sobre su promedio",
+    "Tiendas de Manabí y Esmeraldas +40% en las 4 semanas posteriores al terremoto de 2016"
+  ],
+  "repo_url": "https://github.com/CarlosRomero55/favorita-demand-forecast",
+  "app_url": "APP_URL_PENDIENTE",
+  "cover_image": "docs/img/app_explorador.png"
+}
