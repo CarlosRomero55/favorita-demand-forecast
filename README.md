@@ -4,7 +4,7 @@
 
 Pronóstico de demanda a 16 días para las **54 tiendas y 33 familias de producto** de Corporación Favorita (Ecuador), con 3 millones de registros diarios reales (2013–2017). El proyecto cubre un pipeline de datos Medallion con pruebas de calidad, EDA con efectos de calendario, un modelo LightGBM global validado en el tiempo y una app bilingüe con recomendación de inventario.
 
-🔗 **App:** [favorita-demand-forecast.streamlit.app](https://favorita-demand-forecast-k3bm7c69sld3b67ygiwxnu.streamlit.app/) · 📓 [EDA](notebooks/01_eda.ipynb) · 📓 [Modelo](notebooks/02_model.ipynb) · 📄 [Hallazgos](docs/insights.md)
+🔗 **App:** [Abrir la app en Streamlit](https://favorita-demand-forecast-k3bm7c69sld3b67ygiwxnu.streamlit.app/) · 📓 [EDA](notebooks/01_eda.ipynb) · 📓 [Modelo](notebooks/02_model.ipynb) · 📄 [Hallazgos](docs/insights.md)
 
 ![Explorador de pronóstico](docs/img/app_explorador.png)
 
