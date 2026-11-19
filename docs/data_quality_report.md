@@ -1,6 +1,6 @@
 # Reporte de calidad de datos
 
-Generado automáticamente por `src/pipeline.py` el 2026-11-19 11:46.
+Generado automáticamente por `src/pipeline.py` el 2026-11-19 12:16.
 
 ## Pruebas
 
@@ -46,6 +46,13 @@ Generado automáticamente por `src/pipeline.py` el 2026-11-19 11:46.
 - 118 combinaciones fecha–tienda con ventas pero sin registro en transactions.
 - Petróleo: 31.0% de los días del calendario se completaron con forward-fill (fines de semana y feriados de EE. UU.).
 - Feriados: 12 feriados trasladados (no cuentan como libres ese día), 277 registros que sí son días libres, 5 días de recuperación (Work Day) y 56 eventos.
+
+## Hallazgo: registro incompleto antes de mediados de 2015
+
+- 269 meses–familia tienen una venta diaria en la cadena igual a 0 o menor al 70% de la mediana centrada de 3 meses; 247 de ellos son anteriores a julio de 2015 y afectan a 15 familias.
+- Ejemplos: PRODUCE registra prácticamente 0 en toda la cadena durante la mayoría de los meses hasta mayo de 2015; BEVERAGES cae a la mitad en meses alternos de 2014 y a inicios de 2015; varias familias no alimentarias (LADIESWEAR, CELEBRATION, PET SUPPLIES…) no registran ventas antes de junio de 2015.
+- Después de julio de 2015 solo quedan anomalías en familias de venta esporádica (BABY CARE, BOOKS, HOME AND KITCHEN II, HOME APPLIANCES, SCHOOL AND OFFICE SUPPLIES).
+- **Decisión (ADR 0004):** las comparaciones entre años y meses usan las 18 familias con registro estable (66% de las ventas), y el modelo se entrena desde el 1-jul-2015.
 
 ## Reglas de limpieza aplicadas
 

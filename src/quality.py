@@ -75,7 +75,20 @@ def perfil(con) -> dict:
         SELECT count(*) FROM (SELECT date, store_nbr FROM silver.daily_sales GROUP BY ALL HAVING sum(sales) = 0)""").fetchone()[0]
     hol = con.execute("""SELECT sum(transferred::INT), sum(is_day_off::INT), sum(is_work_day::INT), sum(is_event::INT)
                      FROM silver.holidays""").fetchone()
+    from src import analysis  # import local para evitar ciclos
+
+    reg = analysis.registration_by_family(con)
+    anom = reg[reg.anomalous]
+    tot = reg.groupby("family").avg_daily.sum()
+    estables = sorted(reg.groupby("family").anomalous.sum().loc[lambda s: s == 0].index)
+    antes = anom[anom.month < "2015-07-01"]
     return {
+        "reg_anomalous_months": int(len(anom)),
+        "reg_anomalous_before_jul2015": int(len(antes)),
+        "reg_families_affected": int(anom.family.nunique()),
+        "reg_stable_families": len(estables),
+        "reg_stable_share": float(tot[estables].sum() / tot.sum()),
+        "reg_after_examples": ", ".join(sorted(anom[anom.month >= "2015-07-01"].family.unique())),
         "min_date": r[0], "max_date": r[1], "rows": r[2], "share_zero": r[3],
         "zero_series": zero_series, "oil_imputed": oil_imp, "tx_missing": tx_missing,
         "store_closed_days": store_closed_days, "hol_transferred": hol[0], "hol_day_off": hol[1],
@@ -113,6 +126,18 @@ def write_report(con, checks: list[Check], conteos: dict[str, int]) -> str:
         f"- Feriados: {p['hol_transferred']} feriados trasladados (no cuentan como libres ese día), "
         f"{p['hol_day_off']} registros que sí son días libres, {p['hol_work_day']} días de recuperación (Work Day) "
         f"y {p['hol_event']} eventos.",
+        "",
+        "## Hallazgo: registro incompleto antes de mediados de 2015",
+        "",
+        f"- {p['reg_anomalous_months']} meses–familia tienen una venta diaria en la cadena igual a 0 o menor al 70% de la mediana "
+        f"centrada de 3 meses; {p['reg_anomalous_before_jul2015']} de ellos son anteriores a julio de 2015 y afectan a "
+        f"{p['reg_families_affected']} familias.",
+        "- Ejemplos: PRODUCE registra prácticamente 0 en toda la cadena durante la mayoría de los meses hasta mayo de 2015; BEVERAGES cae a la mitad "
+        "en meses alternos de 2014 y a inicios de 2015; varias familias no alimentarias (LADIESWEAR, CELEBRATION, PET SUPPLIES…) "
+        "no registran ventas antes de junio de 2015.",
+        f"- Después de julio de 2015 solo quedan anomalías en familias de venta esporádica ({p['reg_after_examples']}).",
+        f"- **Decisión (ADR 0004):** las comparaciones entre años y meses usan las {p['reg_stable_families']} familias con "
+        f"registro estable ({p['reg_stable_share']:.0%} de las ventas), y el modelo se entrena desde el 1-jul-2015.",
         "",
         "## Reglas de limpieza aplicadas",
         "",
