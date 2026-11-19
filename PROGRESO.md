@@ -13,8 +13,9 @@ Bitácora del proyecto. Al iniciar una sesión, se lee este archivo y se contin�
 | 2026-11-19 12:16 | fix/registro-incompleto | Detección de meses con registro incompleto antes de jul-2015; EDA con familias estables; modelo reentrenado desde jul-2015 | 5c3524c | ADR 0004; RMSLE 0.405, WAPE 12.8%, sesgo −1.7% |
 | 2026-11-19 12:20 | feat/app | App Streamlit ES/EN de 5 páginas, 11 pruebas con AppTest, guía de despliegue y capturas | 8844d5a | La app lee solo el snapshot; `app/requirements.txt` liviano |
 | 2026-11-19 12:23 | docs/cierre | Hallazgos, README, LinkedIn, portfolio.json, guía de estudio; corrección de cifras de quincena en el EDA | ver log | — |
+| 2026-11-19 12:31 | docs/app-url | URL pública de la app en README, portfolio.json y LinkedIn | ver log | — |
 
 ## Pendientes de Carlos
-- Publicar la app en share.streamlit.io (`main`, `app/streamlit_app.py`) y reemplazar `APP_URL_PENDIENTE` en README, `portfolio.json` y `docs/linkedin.md`.
+- ~~Publicar la app en Streamlit~~ ✅ publicada el 2026-11-19: https://favorita-demand-forecast-k3bm7c69sld3b67ygiwxnu.streamlit.app/
 - Opcional: subir `submission.csv` (generado por `python -m src.model`) a Kaggle y anotar el puntaje aquí.
 - Opcional: ejecutar `sql/00`–`03` en su SQL Server local para validar la versión T-SQL.

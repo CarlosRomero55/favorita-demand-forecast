@@ -1,7 +1,5 @@
 # Publicación para LinkedIn
 
-> Reemplazar `APP_URL_PENDIENTE` por la URL de Streamlit cuando la app esté publicada.
-
 ## Español
 
 ¿Cuánto va a vender cada tienda de un supermercado ecuatoriano las próximas dos semanas? 🛒🇪🇨
@@ -18,7 +16,7 @@ Lo que más me sorprendió:
 🏷️ Las promociones parecen duplicar las ventas, pero comparando dentro de la misma tienda y el mismo mes el efecto es de +9%. Correlación ≠ causalidad.
 🔍 Antes de 2015 había meses sin registrar que inflaban el crecimiento: detectarlo cambió +33% por un +10% real.
 
-App: APP_URL_PENDIENTE
+App: https://favorita-demand-forecast-k3bm7c69sld3b67ygiwxnu.streamlit.app/
 Código: https://github.com/CarlosRomero55/favorita-demand-forecast
 
 #DataScience #BusinessIntelligence #Forecasting #Python #SQL #LightGBM #Streamlit #Retail #Ecuador
@@ -39,7 +37,7 @@ What surprised me most:
 🏷️ Promotions seem to double sales, but within the same store and month the effect is about +9%. Correlation ≠ causation.
 🔍 Before 2015 some months were never recorded, which inflated growth: catching it turned an apparent +33% into a real +10%.
 
-App: APP_URL_PENDIENTE
+App: https://favorita-demand-forecast-k3bm7c69sld3b67ygiwxnu.streamlit.app/
 Code: https://github.com/CarlosRomero55/favorita-demand-forecast
 
 #DataScience #BusinessIntelligence #Forecasting #Python #SQL #LightGBM #Streamlit #Retail
