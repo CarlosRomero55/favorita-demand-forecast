@@ -47,6 +47,9 @@ def export() -> dict[str, float]:
             JOIN gold.dim_store s USING (store_nbr) GROUP BY ALL ORDER BY 1, 2""").df()
         sizes["sales_province_daily"] = _save(prov, "sales_province_daily")
         daily = analysis.daily_totals(con)
+        estables = analysis.stable_families(con)
+        daily_st = analysis.daily_totals(con, estables)
+        sizes["sales_stable_daily"] = _save(daily_st[["date", "sales"]], "sales_stable_daily")
         sizes["sales_total_daily"] = _save(
             daily[["date", "year", "month", "day_of_week", "sales", "ratio", "is_holiday_main",
                    "is_holiday_additional", "is_national_event", "days_since_payday", "items_on_promo"]],
@@ -72,6 +75,7 @@ def export() -> dict[str, float]:
 
         # 6) Efectos estimados (asociaciones observadas)
         s = analysis.seasonality(daily)
+        s["month"] = analysis.seasonality(daily_st)["month"]  # entre meses: solo familias estables (ADR 0004)
         sizes["effect_seasonality"] = _save(pd.concat([
             pd.DataFrame({"kind": "month", "key": s["month"].index, "index": s["month"].values}),
             pd.DataFrame({"kind": "dow", "key": s["dow"].index, "index": s["dow"].values})]), "effect_seasonality")
@@ -89,6 +93,7 @@ def export() -> dict[str, float]:
         sizes["oil_monthly"] = _save(oil["monthly"], "oil_monthly")
         yearly = analysis.yearly(con)
         sizes["kpi_yearly"] = _save(yearly, "kpi_yearly")
+        comparable = analysis.yearly_comparable(daily_st).set_index("year")
         sizes["kpi_family"] = _save(con.execute("SELECT * FROM gold.v_kpi_family ORDER BY sales DESC").df(), "kpi_family")
         sizes["kpi_store"] = _save(con.execute("SELECT * FROM gold.v_kpi_store ORDER BY sales DESC").df(), "kpi_store")
 
@@ -109,7 +114,10 @@ def export() -> dict[str, float]:
         "kpis": {
             "total_sales": float(yearly.sales.sum()),
             "avg_daily_sales_2017": float(yearly.set_index("year").loc[2017, "avg_daily_sales"]),
-            "growth_2016": float(yearly.set_index("year").loc[2016, "growth_avg_daily"]),
+            "growth_2017_comparable": float(comparable.loc[2017, "growth"]),
+            "growth_2016_comparable": float(comparable.loc[2016, "growth"]),
+            "stable_families": len(estables),
+            "stable_share": float(daily_st.sales.sum() / daily.sales.sum()),
             "national_holiday_median_pct": float(hol.set_index("effect").loc["national_holiday", "median_pct"]),
             "christmas_eve_median_pct": float(hol.set_index("effect").loc["christmas_additional", "median_pct"]),
             "local_holiday_median_pct": float(loc["median_pct"]),
@@ -118,6 +126,7 @@ def export() -> dict[str, float]:
             "earthquake_zone_change": float(eq["zone_change_2016"]),
             "earthquake_rest_change": float(eq["rest_change_2016"]),
             "earthquake_zone_change_2015": float(eq["zone_change_2015"]),
+            "earthquake_rest_change_2015": float(eq["rest_change_2015"]),
             "oil_corr_level": float(oil["corr_level"]), "oil_corr_yoy": float(oil["corr_yoy"]),
             "sunday_index": float(s["dow"].loc[6]), "december_index": float(s["month"].loc[12]),
         },
