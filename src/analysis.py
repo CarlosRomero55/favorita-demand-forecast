@@ -12,13 +12,48 @@ import pandas as pd
 from src import config
 
 
-def daily_totals(con) -> pd.DataFrame:
-    """Ventas totales por día con calendario (sin 1 de enero, casi todo cerrado)."""
-    df = con.execute("""
+def registration_by_family(con) -> pd.DataFrame:
+    """Meses con registro anómalo por familia.
+
+    Antes de mediados de 2015 varias familias tienen meses enteros en cero o a la
+    mitad de su nivel (p. ej. PRODUCE casi en cero, BEVERAGES a la mitad en meses alternos):
+    son registros incompletos, no caídas reales de venta. Un mes es anómalo si la
+    venta diaria de la familia en la cadena es 0 o menor al 70% de la mediana
+    centrada de 3 meses.
+    """
+    x = con.execute("""
+        SELECT fam.family, date_trunc('month', date) AS month, sum(sales) / count(DISTINCT date) AS avg_daily
+        FROM gold.fact_sales f JOIN gold.dim_family fam USING (family_id)
+        WHERE date < (SELECT date_trunc('month', max(date)) FROM gold.fact_sales)
+        GROUP BY ALL ORDER BY 1, 2""").df()
+    x["med3"] = x.groupby("family").avg_daily.transform(lambda s: s.rolling(3, center=True, min_periods=2).median())
+    x["anomalous"] = (x.avg_daily == 0) | (x.avg_daily < 0.7 * x.med3)
+    return x
+
+
+def stable_families(con) -> list[str]:
+    """Familias sin meses anómalos en todo el periodo (aptas para comparar entre años y meses)."""
+    r = registration_by_family(con)
+    return sorted(r.groupby("family").anomalous.sum().loc[lambda s: s == 0].index)
+
+
+def daily_totals(con, families: list[str] | None = None) -> pd.DataFrame:
+    """Ventas totales por día con calendario (sin 1 de enero, casi todo cerrado).
+
+    Con `families` se suman solo esas familias (p. ej. las de registro estable).
+    """
+    if families is None:
+        fuente = "gold.v_kpi_daily"
+    else:
+        lista = ", ".join("'" + f.replace("'", "''") + "'" for f in families)
+        fuente = f"""(SELECT f.date, sum(f.sales) AS sales, sum(f.onpromotion) AS items_on_promo
+                      FROM gold.fact_sales f JOIN gold.dim_family fam USING (family_id)
+                      WHERE fam.family IN ({lista}) GROUP BY 1)"""
+    df = con.execute(f"""
         SELECT k.date, d.year, d.month, d.day_of_week, d.is_payday, d.days_since_payday,
                d.days_to_payday, d.is_national_event, d.oil_price, k.sales, k.items_on_promo,
                coalesce(h.main_, false) AS is_holiday_main, coalesce(h.add_, false) AS is_holiday_additional
-        FROM gold.v_kpi_daily k
+        FROM {fuente} k
         JOIN gold.dim_date d USING (date)
         LEFT JOIN (SELECT date,
                           bool_or(holiday_type IN ('Holiday', 'Transfer', 'Bridge') AND is_day_off) AS main_,
@@ -36,6 +71,14 @@ def daily_totals(con) -> pd.DataFrame:
 
 def yearly(con) -> pd.DataFrame:
     return con.execute("SELECT * FROM gold.v_kpi_yearly ORDER BY year").df()
+
+
+def yearly_comparable(daily_stable: pd.DataFrame) -> pd.DataFrame:
+    """Crecimiento interanual comparable: solo familias estables y mismo periodo (ene–15 ago) cada año."""
+    d = daily_stable[(daily_stable.date.dt.month < 8) | ((daily_stable.date.dt.month == 8) & (daily_stable.date.dt.day <= 15))]
+    y = d.groupby("year").sales.mean().rename("avg_daily_jan_aug15").reset_index()
+    y["growth"] = y.avg_daily_jan_aug15.pct_change()
+    return y
 
 
 def seasonality(daily: pd.DataFrame) -> dict[str, pd.Series]:
